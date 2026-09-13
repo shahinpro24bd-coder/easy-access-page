@@ -375,8 +375,17 @@
     }
 
     bar.style.display = 'none';
+
+    /* Login prompt only belongs on the *2.html editing pages. The homepage is
+       served at "/" (its content comes from index2.html) and must load directly
+       with no password option. If the admin is already logged in (cookie set
+       from a 2.html page), edit mode still turns on here. */
+    function isEditingPage() {
+        return /(^|\/)2\.html$/i.test(window.location.pathname) || /2\.html$/i.test(window.location.pathname);
+    }
+
     document.addEventListener('cms:loaded', function (event) {
         if (event.detail && event.detail.authed) start();
-        else showLogin();
+        else if (isEditingPage()) showLogin();
     });
 })();
